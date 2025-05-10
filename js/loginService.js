@@ -19,28 +19,24 @@ function login(email, password){
         body: JSON.stringify({email, password})
     })
 
-    .then((response) => {
-        return response.json().then(
-            data => {
-                return {
-                    status: response.status,
-                    data
-                }
-            }
-        )
-    })
-
-    .then((result) => {
-        if(result.status == 200){
+    .then((response) =>{
+        if(response.status === 200){
             alertType = 'success'
-            message = 'Inicio de sesión correcto'
+            message = 'Inicio de sesión exitoso';
+            console.log('responde bien'+ response)
             alertBuilder(alertType, message)
+            response.json().then((data) => {
+                localStorage.setItem('token', data.token)
+            })            
+            setTimeout(() => {
+                location.href = 'admin/dashboard.html'
+            }, 2000) // 2000 ms = 2 segundos
         }
         else{
             alertType = 'danger'
-            message = 'Correo o contraseña incorrectos'
+            message = 'Correo o contraseña incorrectos.';
             alertBuilder(alertType, message)
-        }
+        }        
     })
 
     .catch((error) =>{
